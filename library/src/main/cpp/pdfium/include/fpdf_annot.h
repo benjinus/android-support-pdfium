@@ -432,6 +432,22 @@ FPDFAnnot_GetStringValue(FPDF_ANNOTATION annot,
                          unsigned long buflen);
 
 // Experimental API.
+// Get the float value corresponding to |key| in |annot|'s dictionary. Writes
+// value to |value| and returns True if |key| exists in the dictionary and
+// |key|'s corresponding value is a number (FPDF_OBJECT_NUMBER), False
+// otherwise.
+//
+//   annot  - handle to an annotation.
+//   key    - the key to the requested dictionary entry, encoded in UTF-8.
+//   value  - receives the value, must not be NULL.
+//
+// Returns True if value found, False otherwise.
+FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV
+FPDFAnnot_GetNumberValue(FPDF_ANNOTATION annot,
+                         FPDF_BYTESTRING key,
+                         float* value);
+
+// Experimental API.
 // Set the AP (appearance string) in |annot|'s dictionary for a given
 // |appearanceMode|.
 //
@@ -506,12 +522,16 @@ FPDF_EXPORT FPDF_BOOL FPDF_CALLCONV FPDFAnnot_SetFlags(FPDF_ANNOTATION annot,
 // Get the annotation flags of |annot|, which is an interactive form
 // annotation in |page|.
 //
-//   page     - handle to a page.
-//   annot    - handle to an interactive form annotation.
+//    hHandle     -   handle to the form fill module, returned by
+//                    FPDFDOC_InitFormFillEnvironment().
+//    page        -   handle to a page.
+//    annot       -   handle to an interactive form annotation.
 //
 // Returns the annotation flags specific to interactive forms.
 FPDF_EXPORT int FPDF_CALLCONV
-FPDFAnnot_GetFormFieldFlags(FPDF_PAGE page, FPDF_ANNOTATION annot);
+FPDFAnnot_GetFormFieldFlags(FPDF_FORMHANDLE handle,
+                            FPDF_PAGE page,
+                            FPDF_ANNOTATION annot);
 
 // Experimental API.
 // Retrieves an interactive form annotation whose rectangle contains a given
@@ -520,7 +540,7 @@ FPDFAnnot_GetFormFieldFlags(FPDF_PAGE page, FPDF_ANNOTATION annot);
 //
 //
 //    hHandle     -   handle to the form fill module, returned by
-//                    FPDFDOC_InitFormFillEnvironment.
+//                    FPDFDOC_InitFormFillEnvironment().
 //    page        -   handle to the page, returned by FPDF_LoadPage function.
 //    page_x      -   X position in PDF "user space".
 //    page_y      -   Y position in PDF "user space".
@@ -532,6 +552,43 @@ FPDFAnnot_GetFormFieldAtPoint(FPDF_FORMHANDLE hHandle,
                               FPDF_PAGE page,
                               double page_x,
                               double page_y);
+
+// Experimental API.
+// Get the number of options in the |annot|'s "Opt" dictionary. Intended for
+// use with listbox and combobox widget annotations.
+//
+//   hHandle - handle to the form fill module, returned by
+//             FPDFDOC_InitFormFillEnvironment.
+//   annot   - handle to an annotation.
+//
+// Returns the number of options in "Opt" dictionary on success. Return value
+// will be -1 if annotation does not have an "Opt" dictionary or other error.
+FPDF_EXPORT int FPDF_CALLCONV FPDFAnnot_GetOptionCount(FPDF_FORMHANDLE hHandle,
+                                                       FPDF_ANNOTATION annot);
+
+// Experimental API.
+// Get the string value for the label of the option at |index| in |annot|'s
+// "Opt" dictionary. Intended for use with listbox and combobox widget
+// annotations. |buffer| is only modified if |buflen| is longer than the length
+// of contents. If index is out of range or in case of other error, nothing
+// will be added to |buffer| and the return value will be 0. Note that
+// return value of empty string is 2 for "\0\0".
+//
+//   hHandle - handle to the form fill module, returned by
+//             FPDFDOC_InitFormFillEnvironment.
+//   annot   - handle to an annotation.
+//   index   - numeric index of the option in the "Opt" array
+//   buffer  - buffer for holding the value string, encoded in UTF16-LE.
+//   buflen  - length of the buffer.
+//
+// Returns the length of the string value or 0 if annot does not have "Opt"
+// array, index is out of range or other error.
+FPDF_EXPORT unsigned long FPDF_CALLCONV
+FPDFAnnot_GetOptionLabel(FPDF_FORMHANDLE hHandle,
+                         FPDF_ANNOTATION annot,
+                         int index,
+                         void* buffer,
+                         unsigned long buflen);
 
 #ifdef __cplusplus
 }  // extern "C"
