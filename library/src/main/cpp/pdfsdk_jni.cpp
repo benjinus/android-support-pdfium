@@ -37,18 +37,18 @@ extern "C" {
 #include <string.h>
 #include <stdio.h>
 #include <Mutex.h>
-#include <fpdfview.h>
-#include <fpdf_doc.h>
-#include <fpdf_edit.h>
-#include <fpdf_text.h>
-#include <fpdf_annot.h>
-#include <cpp/fpdf_scopers.h>
+#include <public/fpdfview.h>
+#include <public/fpdf_doc.h>
+#include <public/fpdf_edit.h>
+#include <public/fpdf_text.h>
+#include <public/fpdf_annot.h>
+#include <public/cpp/fpdf_scopers.h>
 }
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 #include <android/bitmap.h>
-#include <fpdf_save.h>
+#include <public/fpdf_save.h>
 
 using namespace android;
 
