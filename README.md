@@ -10,5 +10,5 @@ build pdfium with [origin/HEAD](https://pdfium.googlesource.com/pdfium/+/master/
 * Text functions(locate/extract)
 * Search functions(previous/next)
 
-## Features will add
-* Annotations
+## Build
+Fork a copy of the repo, follow <b>BUILD.md</b> to build the natives for Android
