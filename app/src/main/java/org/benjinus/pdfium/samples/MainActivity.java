@@ -1,32 +1,41 @@
 package org.benjinus.pdfium.samples;
 
 import java.io.File;
+import java.util.List;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.SpannableStringBuilderKt;
 import org.benjinus.pdfium.Meta;
 import org.benjinus.pdfium.PdfiumSDK;
-import org.benjinus.pdfium.search.TextSearchContext;
+import org.benjinus.pdfium.search.SearchData;
 import org.benjinus.pdfium.util.Size;
 
 public class MainActivity extends AppCompatActivity {
 
     ImageView mImageView;
+    TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.imageView);
+        mTextView = findViewById(R.id.textView);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -52,10 +61,11 @@ public class MainActivity extends AppCompatActivity {
         decodePDFPage();
     }
 
+    @SuppressLint("SetTextI18n")
     private void decodePDFPage() {
         try {
 
-            File pdfFile = ((SamplesApplication) getApplication()).createNewSampleFile("3941.pdf");
+            File pdfFile = ((SamplesApplication) getApplication()).createNewSampleFile("AngularSample.pdf");
 
             PdfiumSDK sdk = new PdfiumSDK(pdfFile, null);
 
@@ -77,23 +87,20 @@ public class MainActivity extends AppCompatActivity {
 
             mImageView.setImageBitmap(bitmap);
 
-            String searchQuery = "angular";
-            for (int i = 0; i < sdk.getPageCount(); i++) {
-                String chars = sdk.extractCharacters(i, 0, sdk.countCharactersOnPage(i));
-                if (chars != null && chars.length() > 0) {
-                    //                    Log.d("PDFSDK", chars);
-                    if (chars.toLowerCase().contains(searchQuery.toLowerCase())) {
-                        Log.d("PDFSDK", "Page " + (i + 1) + " chars count: " + chars.length());
-                        Log.d("PDFSDK", "Page " + (i + 1) + " equals query: " + searchQuery);
-                        TextSearchContext ctx = sdk.newPageSearch(i, searchQuery, false, true);
-                        ctx.prepareSearch();
-                        ctx.startSearch();
-                        if (ctx.countResult() > 0) {
-                            Log.d("PDFSDK", "Search \"" + searchQuery + "\" index " + (i + 1));
-                        }
-                        ctx.stopSearch();
+            String searchQuery = "Lorem";
+            List<SearchData> searchData = sdk.search(searchQuery, true);
+            if (searchData.size()>0){
+                Log.d("PDFSDK", "Founded data size: " + searchData.size());
+                SpannableStringBuilder s = new SpannableStringBuilder();
+                for (int i = 0; i< searchData.size(); i++){
+                    SearchData sd = searchData.get(i);
+                    Log.d("PDFSDK", "Founded data: " + sd.toString());
+                    s.append(sd.getPartOfText());
+                    if (i>0 && i < searchData.size()-1){
+                        s.append("\n\n");
                     }
                 }
+                mTextView.setText(s);
             }
 
             sdk.closeDocument();

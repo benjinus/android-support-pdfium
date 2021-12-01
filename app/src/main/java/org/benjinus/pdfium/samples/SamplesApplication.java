@@ -13,7 +13,7 @@ public class SamplesApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        createSampleFile("3941.pdf");
+        createSampleFile("AngularSample.pdf");
     }
 
     private File createSampleFile(String fileName) {
