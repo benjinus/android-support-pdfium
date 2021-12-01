@@ -1,47 +1,37 @@
-package org.benjinus.pdfium.samples.utils;
+package org.benjinus.pdfium.samples.utils
 
-import androidx.annotation.Keep;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import androidx.annotation.Keep
+import java.io.*
+import kotlin.Throws
 
 /**
  * Helper methods for dealing with Files.
  */
 @Keep
-@SuppressWarnings("WeakerAccess")
-public class IOUtils {
-
-    public static void copy(InputStream inputStream, File output) throws IOException {
-        OutputStream outputStream = null;
+object IOUtils {
+    @Throws(IOException::class)
+    fun copy(inputStream: InputStream?, output: File?) {
+        var outputStream: OutputStream? = null
         try {
-            outputStream = new FileOutputStream(output);
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            while ((read = inputStream.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
+            outputStream = FileOutputStream(output)
+            var read = 0
+            val bytes = ByteArray(1024)
+            while (inputStream!!.read(bytes).also { read = it } != -1) {
+                outputStream.write(bytes, 0, read)
             }
         } finally {
             try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
+                inputStream?.close()
             } finally {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
+                outputStream?.close()
             }
         }
     }
 
-    public static void delete(File file) {
+    fun delete(file: File) {
         try {
-            //noinspection ResultOfMethodCallIgnored
-            file.delete();
-        } catch (Throwable ignored) {
+            file.delete()
+        } catch (ignored: Throwable) {
         }
     }
 }

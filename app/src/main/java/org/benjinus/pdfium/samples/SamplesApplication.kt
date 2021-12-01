@@ -1,49 +1,40 @@
-package org.benjinus.pdfium.samples;
+package org.benjinus.pdfium.samples
 
-import android.app.Application;
-import android.os.Environment;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import org.benjinus.pdfium.samples.utils.IOUtils;
+import android.app.Application
+import org.benjinus.pdfium.samples.utils.IOUtils
+import java.io.File
+import java.io.IOException
+import java.lang.Exception
 
-public class SamplesApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        createSampleFile("AngularSample.pdf");
+class SamplesApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        createSampleFile("AngularSample.pdf")
     }
 
-    private File createSampleFile(String fileName) {
-        try {
-            InputStream in = getAssets().open(fileName);
-            File target = getSampleFile(fileName);
-            if (target.isFile()) {
-                IOUtils.delete(target);
+    private fun createSampleFile(fileName: String): File {
+        return try {
+            val stream = assets.open(fileName)
+            val target = getSampleFile(fileName)
+            if (target.isFile) {
+                IOUtils.delete(target)
             }
-
-            IOUtils.copy(in, target);
-            return target;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            IOUtils.copy(stream, target)
+            target
+        } catch (e: IOException) {
+            e.printStackTrace()
+            throw IOException("Error creating file")
         }
     }
 
-    public File getSampleFile(String fileName) {
-        return new File(getFilesDir(), fileName);
+    private fun getSampleFile(fileName: String): File {
+        return File(filesDir, fileName)
     }
 
-    public File createNewSampleFile(String fileName) {
-
-        File file = getSampleFile(fileName);
-
-        if (!file.isFile()) {
-            return createSampleFile(fileName);
-        }
-
-        return file;
+    fun createNewSampleFile(fileName: String): File {
+        val file = getSampleFile(fileName)
+        return if (!file.isFile) {
+            createSampleFile(fileName)
+        } else file
     }
 }
