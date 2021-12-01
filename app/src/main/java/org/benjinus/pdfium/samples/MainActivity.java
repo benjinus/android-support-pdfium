@@ -1,22 +1,21 @@
 package org.benjinus.pdfium.samples;
 
-import static android.os.ParcelFileDescriptor.MODE_READ_ONLY;
+import java.io.File;
 
 import android.Manifest;
-import android.Manifest.permission;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
-import java.io.File;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import org.benjinus.pdfium.Meta;
 import org.benjinus.pdfium.PdfiumSDK;
+import org.benjinus.pdfium.search.TextSearchContext;
 import org.benjinus.pdfium.util.Size;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.imageView);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
             // Should we show an explanation?
@@ -42,8 +41,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        1);
+                        new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
                 // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                 // app-defined int constant. The callback method gets the
@@ -51,19 +49,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         decodePDFPage();
     }
 
     private void decodePDFPage() {
         try {
 
-            File pdfFile = ((SamplesApplication) getApplication()).createNewSampleFile("Sample.pdf");
+            File pdfFile = ((SamplesApplication) getApplication()).createNewSampleFile("3941.pdf");
 
-            ParcelFileDescriptor fileDescriptor = ParcelFileDescriptor.open(pdfFile, MODE_READ_ONLY);
-
-            PdfiumSDK sdk = new PdfiumSDK();
-            sdk.newDocument(fileDescriptor);
+            PdfiumSDK sdk = new PdfiumSDK(pdfFile, null);
 
             Log.d("PDFSDK", "Page count: " + sdk.getPageCount());
 
@@ -83,9 +77,29 @@ public class MainActivity extends AppCompatActivity {
 
             mImageView.setImageBitmap(bitmap);
 
+            String searchQuery = "angular";
+            for (int i = 0; i < sdk.getPageCount(); i++) {
+                String chars = sdk.extractCharacters(i, 0, sdk.countCharactersOnPage(i));
+                if (chars != null && chars.length() > 0) {
+                    //                    Log.d("PDFSDK", chars);
+                    if (chars.toLowerCase().contains(searchQuery.toLowerCase())) {
+                        Log.d("PDFSDK", "Page " + (i + 1) + " chars count: " + chars.length());
+                        Log.d("PDFSDK", "Page " + (i + 1) + " equals query: " + searchQuery);
+                        TextSearchContext ctx = sdk.newPageSearch(i, searchQuery, false, true);
+                        ctx.prepareSearch();
+                        ctx.startSearch();
+                        if (ctx.countResult() > 0) {
+                            Log.d("PDFSDK", "Search \"" + searchQuery + "\" index " + (i + 1));
+                        }
+                        ctx.stopSearch();
+                    }
+                }
+            }
+
             sdk.closeDocument();
 
         } catch (Exception e) {
+            Log.d("PDFSDK", "Exception: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -1,30 +1,18 @@
-package org.benjinus.pdfium.search;
+package org.benjinus.pdfium.search
 
-import android.graphics.RectF;
+import android.graphics.RectF
 
-public interface TextSearchContext {
-
-    void prepareSearch();
-
-    int getPageIndex();
-
-    String getQuery();
-
-    boolean isMatchCase();
-
-    boolean isMatchWholeWord();
-
-    int countResult();
-
-    boolean hasNext();
-
-    boolean hasPrev();
-
-    RectF searchNext();
-
-    RectF searchPrev();
-
-    void startSearch();
-
-    void stopSearch();
+interface TextSearchContext {
+    fun prepareSearch()
+    val pageIndex: Int
+    val query: String?
+    val isMatchCase: Boolean
+    val isMatchWholeWord: Boolean
+    fun countResult(): Int
+    operator fun hasNext(): Boolean
+    fun hasPrev(): Boolean
+    fun searchNext(): RectF?
+    fun searchPrev(): RectF?
+    fun startSearch()
+    fun stopSearch()
 }

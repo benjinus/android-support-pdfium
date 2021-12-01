@@ -1,51 +1,15 @@
-package org.benjinus.pdfium;
+package org.benjinus.pdfium
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*
 
-public class Bookmark {
-    private String title;
-    private long pageIdx;
-    private List<Bookmark> children = new ArrayList<>();
-    private final long mNativePtr;
+class Bookmark(val nativePtr: Long) {
+    var title: String? = null
+    var pageIdx: Long = 0
+    var children: MutableList<Bookmark> = ArrayList()
 
-    private Bookmark() {
-        this(-1);
-    }
+    private constructor() : this(-1) {}
 
-    public Bookmark(long mNativePtr) {
-        this.mNativePtr = mNativePtr;
-    }
-
-    public long getNativePtr() {
-        return mNativePtr;
-    }
-
-    public List<Bookmark> getChildren() {
-        return children;
-    }
-
-    public boolean hasChildren() {
-        return !children.isEmpty();
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public long getPageIdx() {
-        return pageIdx;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setPageIdx(long pageIdx) {
-        this.pageIdx = pageIdx;
-    }
-
-    public void setChildren(List<Bookmark> children) {
-        this.children = children;
+    fun hasChildren(): Boolean {
+        return !children.isEmpty()
     }
 }

@@ -6,49 +6,29 @@
 // UNAUTHORIZED REPRODUCTION OR DISTRIBUTION IS SUBJECT TO CIVIL AND CRIMINAL PENALTIES.
 // This notice may not be removed from this file.
 ////////////////////////////////////////////////////////////////////////////////
+package org.benjinus.pdfium.util
 
-package org.benjinus.pdfium.util;
+class Size(val width: Int, val height: Int) {
 
-public class Size {
-    private final int width;
-    private final int height;
-
-    public Size(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
+    override fun equals(other: Any?): Boolean {
+        if (other == null) {
+            return false
         }
-        if (this == obj) {
-            return true;
+        if (this === other) {
+            return true
         }
-        if (obj instanceof Size) {
-            Size other = (Size) obj;
-            return width == other.width && height == other.height;
+        if (other is Size) {
+            return width == other.width && height == other.height
         }
-        return false;
+        return false
     }
 
-    @Override
-    public String toString() {
-        return width + "x" + height;
+    override fun toString(): String {
+        return width.toString() + "x" + height
     }
 
-    @Override
-    public int hashCode() {
+    override fun hashCode(): Int {
         // assuming most sizes are <2^16, doing a rotate will give us perfect hashing
-        return height ^ ((width << (Integer.SIZE / 2)) | (width >>> (Integer.SIZE / 2)));
+        return height xor (width shl Integer.SIZE / 2 or (width ushr Integer.SIZE / 2))
     }
 }

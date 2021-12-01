@@ -13,7 +13,7 @@ public class SamplesApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        createSampleFile("Sample.pdf");
+        createSampleFile("3941.pdf");
     }
 
     private File createSampleFile(String fileName) {
@@ -33,7 +33,7 @@ public class SamplesApplication extends Application {
     }
 
     public File getSampleFile(String fileName) {
-        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+        return new File(getFilesDir(), fileName);
     }
 
     public File createNewSampleFile(String fileName) {

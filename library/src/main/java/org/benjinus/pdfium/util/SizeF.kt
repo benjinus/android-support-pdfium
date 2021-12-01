@@ -6,52 +6,32 @@
 // UNAUTHORIZED REPRODUCTION OR DISTRIBUTION IS SUBJECT TO CIVIL AND CRIMINAL PENALTIES.
 // This notice may not be removed from this file.
 ////////////////////////////////////////////////////////////////////////////////
+package org.benjinus.pdfium.util
 
-package org.benjinus.pdfium.util;
+class SizeF(val width: Float, val height: Float) {
 
-public class SizeF {
-    private final float width;
-    private final float height;
-
-    public SizeF(float width, float height) {
-        this.width = width;
-        this.height = height;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
-            return false;
+    override fun equals(other: Any?): Boolean {
+        if (other == null) {
+            return false
         }
-        if (this == obj) {
-            return true;
+        if (this === other) {
+            return true
         }
-        if (obj instanceof SizeF) {
-            final SizeF other = (SizeF) obj;
-            return width == other.width && height == other.height;
+        if (other is SizeF) {
+            return width == other.width && height == other.height
         }
-        return false;
+        return false
     }
 
-    @Override
-    public String toString() {
-        return width + "x" + height;
+    override fun toString(): String {
+        return width.toString() + "x" + height
     }
 
-    @Override
-    public int hashCode() {
-        return Float.floatToIntBits(width) ^ Float.floatToIntBits(height);
+    override fun hashCode(): Int {
+        return java.lang.Float.floatToIntBits(width) xor java.lang.Float.floatToIntBits(height)
     }
 
-    public Size toSize() {
-        return new Size((int) width, (int) height);
+    fun toSize(): Size {
+        return Size(width.toInt(), height.toInt())
     }
 }

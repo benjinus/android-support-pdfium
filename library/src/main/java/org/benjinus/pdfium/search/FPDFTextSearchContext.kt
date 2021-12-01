@@ -1,59 +1,33 @@
-package org.benjinus.pdfium.search;
+package org.benjinus.pdfium.search
 
-public abstract class FPDFTextSearchContext implements TextSearchContext {
-    protected final int pageIndex;
-    protected final String query;
-    protected final boolean matchCase;
-    protected final boolean matchWholeWord;
 
-    protected boolean mHasNext = true;
-    protected boolean mHasPrev = false;
+abstract class FPDFTextSearchContext constructor(
+    override val pageIndex: Int,
+    override val query: String,
+    override val isMatchCase: Boolean,
+    override val isMatchWholeWord: Boolean
+) : TextSearchContext {
+    @JvmField
+    protected var mHasNext = true
 
-    protected FPDFTextSearchContext(int pageIndex, String query, boolean matchCase, boolean matchWholeWord) {
-        this.pageIndex = pageIndex;
-        this.query = query;
-        this.matchCase = matchCase;
-        this.matchWholeWord = matchWholeWord;
-        prepareSearch();
+    @JvmField
+    protected var mHasPrev = false
+
+    override fun hasNext(): Boolean {
+        return countResult() > 0 || mHasNext
     }
 
-    @Override
-    public int getPageIndex() {
-        return pageIndex;
+    override fun hasPrev(): Boolean {
+        return countResult() > 0 || mHasPrev
     }
 
-    @Override
-    public String getQuery() {
-        return query;
+    override fun startSearch() {
+        searchNext()
     }
 
-    @Override
-    public boolean isMatchCase() {
-        return matchCase;
-    }
+    override fun stopSearch() {}
 
-    @Override
-    public boolean isMatchWholeWord() {
-        return matchWholeWord;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return countResult() > 0 || mHasNext;
-    }
-
-    @Override
-    public boolean hasPrev() {
-        return countResult() > 0 || mHasPrev;
-    }
-
-    @Override
-    public void startSearch() {
-        searchNext();
-    }
-
-    @Override
-    public void stopSearch() {
-
+    init {
+        prepareSearch()
     }
 }

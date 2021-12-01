@@ -1,27 +1,25 @@
-package org.benjinus.pdfium.util;
+package org.benjinus.pdfium.util
 
-import android.os.ParcelFileDescriptor;
+import android.annotation.SuppressLint
+import android.os.ParcelFileDescriptor
+import java.io.FileDescriptor
+import java.lang.reflect.Field
 
-import java.io.FileDescriptor;
-import java.lang.reflect.Field;
-
-public class FileUtils {
-
-    private static final Class FD_CLASS = FileDescriptor.class;
-
-    private static Field mFdField = null;
-
-    public static int getNumFd(ParcelFileDescriptor fdObj) {
-        try {
+object FileUtils {
+    private val FD_CLASS: Class<*> = FileDescriptor::class.java
+    private var mFdField: Field? = null
+    @SuppressLint("DiscouragedPrivateApi")
+    @JvmStatic
+    fun getNumFd(fdObj: ParcelFileDescriptor): Int {
+        return try {
             if (mFdField == null) {
-                mFdField = FD_CLASS.getDeclaredField("descriptor");
-                mFdField.setAccessible(true);
+                mFdField = FD_CLASS.getDeclaredField("descriptor")
+                mFdField?.isAccessible = true
             }
-
-            return mFdField.getInt(fdObj.getFileDescriptor());
-        } catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-            return -1;
+            mFdField?.getInt(fdObj.fileDescriptor) ?: -1
+        } catch (e: ReflectiveOperationException) {
+            e.printStackTrace()
+            -1
         }
     }
 }

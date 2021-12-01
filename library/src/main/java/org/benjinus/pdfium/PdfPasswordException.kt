@@ -1,10 +1,8 @@
-package org.benjinus.pdfium;
+package org.benjinus.pdfium
 
-public class PdfPasswordException extends RuntimeException {
-    public PdfPasswordException() {
-    }
+import java.lang.RuntimeException
 
-    public PdfPasswordException(String message) {
-        super(message);
-    }
+class PdfPasswordException : RuntimeException {
+    constructor() {}
+    constructor(message: String?) : super(message) {}
 }

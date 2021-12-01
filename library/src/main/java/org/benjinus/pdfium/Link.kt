@@ -1,30 +1,13 @@
-package org.benjinus.pdfium;
+package org.benjinus.pdfium
 
-import android.graphics.RectF;
+import android.graphics.RectF
 
-public class Link {
-    private RectF bounds;
-    private Integer destPageIdx;
-    private String uri;
+class Link(bounds: RectF?, destPageIdx: Int?, uri: String?) {
+    var bounds: RectF? = bounds
+        private set
+    var destPageIdx: Int? = destPageIdx
+        private set
+    var uri: String? = uri
+        private set
 
-    public Link(RectF bounds, Integer destPageIdx, String uri) {
-        this.bounds = bounds;
-        this.destPageIdx = destPageIdx;
-        this.uri = uri;
-    }
-
-    private Link() {
-    }
-
-    public Integer getDestPageIdx() {
-        return destPageIdx;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public RectF getBounds() {
-        return bounds;
-    }
 }

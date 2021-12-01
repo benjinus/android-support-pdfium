@@ -1,8 +1,8 @@
-package org.benjinus.pdfium.search;
+package org.benjinus.pdfium.search
 
-import android.graphics.Rect;
+import android.graphics.Rect
 
-public class SearchHit {
-    private int textIndex;
-    private Rect bound;
+class SearchHit {
+    private val textIndex = 0
+    private val bound: Rect? = null
 }

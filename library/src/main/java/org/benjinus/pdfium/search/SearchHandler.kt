@@ -1,12 +1,9 @@
-package org.benjinus.pdfium.search;
+package org.benjinus.pdfium.search
 
-import android.graphics.Rect;
+import android.graphics.Rect
 
-public interface SearchHandler {
-    int getStartIndex();
-
-    int getStopIndex();
-
-    Rect[] getResults();
-
+interface SearchHandler {
+    val startIndex: Int
+    val stopIndex: Int
+    val results: Array<Rect?>?
 }

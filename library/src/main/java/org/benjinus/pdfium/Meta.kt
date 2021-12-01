@@ -1,63 +1,46 @@
-package org.benjinus.pdfium;
+package org.benjinus.pdfium
 
-public class Meta {
-    private String title;
-    private String author;
-    private String subject;
-    private String keywords;
-    private String creator;
-    private String producer;
-    private String creationDate;
-    private String modDate;
+class Meta {
+    var title: String? = null
+        private set
+    var author: String? = null
+        private set
+    var subject: String? = null
+        private set
+    var keywords: String? = null
+        private set
+    var creator: String? = null
+        private set
+    var producer: String? = null
+        private set
+    var creationDate: String? = null
+        private set
+    var modDate: String? = null
+        private set
 
-    public Meta(String title, String author, String subject, String keywords, String creator, String producer, String creationDate, String modDate) {
-        this.title = title;
-        this.author = author;
-        this.subject = subject;
-        this.keywords = keywords;
-        this.creator = creator;
-        this.producer = producer;
-        this.creationDate = creationDate;
-        this.modDate = modDate;
+    constructor(
+        title: String?,
+        author: String?,
+        subject: String?,
+        keywords: String?,
+        creator: String?,
+        producer: String?,
+        creationDate: String?,
+        modDate: String?
+    ) {
+        this.title = title
+        this.author = author
+        this.subject = subject
+        this.keywords = keywords
+        this.creator = creator
+        this.producer = producer
+        this.creationDate = creationDate
+        this.modDate = modDate
     }
 
-    private Meta() {
-    }
+    private constructor() {}
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public String getKeywords() {
-        return keywords;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public String getProducer() {
-        return producer;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public String getModDate() {
-        return modDate;
-    }
-
-    @Override
-    public String toString() {
+    override fun toString(): String {
         return "Meta{" +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
@@ -67,6 +50,6 @@ public class Meta {
                 ", producer='" + producer + '\'' +
                 ", creationDate='" + creationDate + '\'' +
                 ", modDate='" + modDate + '\'' +
-                '}';
+                '}'
     }
 }
